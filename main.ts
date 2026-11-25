@@ -21,6 +21,13 @@ if (ENTRY.trim().length === 0) {
 if (ENTRY.includes("\n") || ENTRY.includes("\r")) {
   throw new Error("entry must be a single line");
 }
+// eslint-disable-next-line no-control-regex
+if (/[\u0000-\u001f\u007f]/.test(ENTRY)) {
+  throw new Error("entry must not contain control characters");
+}
+if (ENTRY !== ENTRY.trim()) {
+  throw new Error("entry must not have leading or trailing whitespace");
+}
 
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(outFile, ENTRY, "utf8");
